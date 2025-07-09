@@ -1,17 +1,17 @@
 {
-  "name": "vitepress-plugin-diagrams",
+  "name": "vitepress-plugin-kroki",
   "version": "1.0.0",
   "description": "VitePress plugin for generating diagrams from text (PlantUML, Mermaid, etc.)",
   "author": "Ruslan Makarov <ruslan.makarov@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/altrusl/vitepress-plugin-diagrams.git"
+    "url": "git+https://github.com/alechapelain/vitepress-plugin-kroki.git"
   },
   "bugs": {
-    "url": "https://github.com/altrusl/vitepress-plugin-diagrams/issues"
+    "url": "https://github.com/alechapelain/vitepress-plugin-kroki/issues"
   },
-  "homepage": "https://github.com/altrusl/vitepress-plugin-diagrams",
+  "homepage": "https://github.com/alechapelain/vitepress-plugin-kroki",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

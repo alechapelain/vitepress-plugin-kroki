@@ -1,4 +1,6 @@
-# VitePress Diagrams Plugin
+Fork from https://github.com/vuesence/vitepress-plugin-diagrams
+
+# VitePress Plugin Kroki
 
 [English](README.md) | [Español](README.es.md) | [中文](README.zh.md) | [Українська](README.uk.md) | [Русский](README.ru.md)
 
@@ -78,6 +80,16 @@ graph TD
 <!-- diagram id="1" caption: "System Design Flow" -->
 ````
 
+You can also create diagram in markdown using a file if you set the type followed by ":file":
+````
+```excalidraw:file
+/example.excalidraw
+```
+````
+<!-- diagram id="example" caption: "Example" -->
+
+note: it will use the plugin option "diagramsDir" as base for the path.
+
 ## Diagram Metadata
 
 The diagram metadata feature provides additional context and identification. You can add metadata to your diagrams using special HTML comments.
@@ -97,10 +109,12 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 
 ## Configuration
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `diagramsDir` | `string` | `"docs/public/diagrams"` | Directory where SVG files will be stored |
-| `publicPath` | `string` | `"/diagrams"` | Public path for accessing the SVG files |
+| Option | Type       | Default                  | Description |
+|--------|------------|--------------------------|-------------|
+| `diagramsDir` | `string`   | `"docs/public/diagrams"` | Directory where SVG files will be stored |
+| `publicPath` | `string`   | `"/diagrams"`            | Public path for accessing the SVG files |
+| `krokiBaseUrl` | `string`   | `https://kroki.io`       | BaseUrl for kroki, useful when using self-hosted instances |
+| `customFetch` | `function` | `default fetch function` | Custom fetch to set proxy or specific network configuration |
 
 ## Output
 

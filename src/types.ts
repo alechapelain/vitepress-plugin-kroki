@@ -13,6 +13,19 @@ export interface DiagramPluginOptions {
    * @default "diagrams"
    */
   publicPath?: string;
+
+  /**
+   * BaseUrl for kroki, useful when using self-hosted instances
+   * @default "https://kroki.io"
+   */
+  krokiBaseUrl?: string;
+
+  /**
+   * Custom fetch to set proxy or specific network configuration
+   * @param input
+   * @param init
+   */
+  customFetch?: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
 }
 
 /**

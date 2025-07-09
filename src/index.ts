@@ -50,7 +50,6 @@ export function diagramToSvg(
       normalizedDiagram,
       diagramId,
     );
-    // console.log("filename", filename);
 
     const filepath = path.join(diagramsDir, filename);
 
@@ -80,7 +79,9 @@ export function diagramToSvg(
 
       fs.writeFileSync(filepath, placeholderSvg);
 
-      fetch(`https://kroki.io/${diagramType}`, {
+      const call = diagramsPluginOptions.customFetch || fetch
+
+      call(`${diagramsPluginOptions.krokiBaseUrl || 'https://kroki.io' }/${diagramType}`, {
         method: "POST",
         headers: {
           Accept: "image/svg+xml",
@@ -144,6 +145,25 @@ export function diagramToSvg(
 }
 
 /**
+ * Retrieve diagram content, either directly from content, or file if info contains :file
+ * @param token
+ * @param diagramsPluginOptions
+ */
+function getDiagramContent(token, diagramsPluginOptions: DiagramPluginOptions) {
+  const diagram = token.content.trim();
+
+  if (token.info.includes(':file')) {
+    const diagramsDir = resolveDiagramBaseDir(
+        diagramsPluginOptions.diagramsDir,
+    );
+
+    return fs.readFileSync(path.join(diagramsDir, diagram)).toString()
+  } else {
+    return diagram
+  }
+}
+
+/**
  * Configure VitePress markdown renderer to support diagram generation
  * @param md Markdown renderer
  * @param diagramsPluginOptions Plugin configuration options
@@ -156,14 +176,14 @@ export function configureDiagramsPlugin(
 
   md.renderer.rules.fence = (tokens, idx, options, env, slf) => {
     const token = tokens[idx];
-    const diagramType = token.info.trim().toLowerCase();
+    const diagramType = token.info.trim().replace(':file', '').toLowerCase();
 
     // Check if the code block is a supported diagram type
     if (SUPPORTED_DIAGRAM_TYPES.includes(diagramType as DiagramType)) {
-      const diagram = token.content.trim();
       const { caption, id } = extractDiagramMetadata(tokens, idx);
+
       return diagramToSvg(
-        diagram,
+        getDiagramContent(token, diagramsPluginOptions),
         diagramType,
         caption,
         id,
