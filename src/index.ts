@@ -79,18 +79,21 @@ export function diagramToSvg(
 
       fs.writeFileSync(filepath, placeholderSvg);
 
-      const call = diagramsPluginOptions.customFetch || fetch
+      const call = diagramsPluginOptions.customFetch || fetch;
 
-      call(`${diagramsPluginOptions.krokiBaseUrl || 'https://kroki.io' }/${diagramType}`, {
-        method: "POST",
-        headers: {
-          Accept: "image/svg+xml",
-          "Content-Type": "text/plain",
-        },
-        body: normalizedDiagram,
-      })
-        .then((res) => res.text())
-        .then((svg) => {
+      // Start the fetch operation in the background
+      (async () => {
+        try {
+          const res = await call(`${diagramsPluginOptions.krokiBaseUrl || 'https://kroki.io'}/${diagramType}`, {
+            method: "POST",
+            headers: {
+              Accept: "image/svg+xml",
+              "Content-Type": "text/plain",
+            },
+            body: normalizedDiagram,
+          });
+          const svg = await res.text();
+
           // Remove old files with the same diagram ID
           if (diagramId) {
             removeOldDiagramFiles(
@@ -101,8 +104,11 @@ export function diagramToSvg(
             );
           }
           fs.writeFileSync(filepath, svg);
-          return svg;
-        });
+          console.log(`\n✓ Successfully generated diagram: ${filepath}`);
+        } catch (error) {
+          console.error('Error generating diagram:', error);
+        }
+      })();
     }
 
     const publicPath = diagramsPluginOptions.publicPath ?? "/diagrams";
@@ -129,12 +135,11 @@ export function diagramToSvg(
           alt="${diagramType} Diagram" 
           class="vpd-diagram-image" 
         />
-      ${
-        caption
-          ? `<figcaption class="vpd-diagram-caption">
+      ${caption
+        ? `<figcaption class="vpd-diagram-caption">
         ${caption}
       </figcaption>`
-          : ""
+        : ""
       }
     </figure>`;
   } catch (error: unknown) {
@@ -154,10 +159,11 @@ function getDiagramContent(token, diagramsPluginOptions: DiagramPluginOptions) {
 
   if (token.info.includes(':file')) {
     const diagramsDir = resolveDiagramBaseDir(
-        diagramsPluginOptions.diagramsDir,
+      diagramsPluginOptions.diagramsDir,
     );
-
-    return fs.readFileSync(path.join(diagramsDir, diagram)).toString()
+    const filePath = path.join(diagramsDir, diagram);
+    console.log(`\nProcessing diagram from file: ${filePath}`);
+    return fs.readFileSync(filePath).toString()
   } else {
     return diagram
   }
