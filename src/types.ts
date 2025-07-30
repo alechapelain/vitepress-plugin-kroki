@@ -9,6 +9,11 @@ export interface DiagramPluginOptions {
   diagramsDir?: string;
 
   /**
+   * Directory name where to copy svg files
+   */
+  diagramsDistDir?: string
+
+  /**
    * Custom public path for serving diagram images
    * @default "diagrams"
    */
@@ -41,4 +46,13 @@ export interface DiagramMetadata {
    * Optional caption for the diagram
    */
   caption?: string;
+}
+
+export type Call = {
+  filepath: string;
+  getDiagram: () => Promise<void | {
+    type: string;
+    fileName: string;
+    source: string;
+  }>
 }

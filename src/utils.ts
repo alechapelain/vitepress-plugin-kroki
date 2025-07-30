@@ -70,6 +70,7 @@ export function resolveDiagramBaseDir(customDir?: string): string {
  * @param diagramsDir Directory containing diagram files
  * @param diagramType Type of diagram
  * @param diagramId Unique identifier for the diagram
+ * @param filename
  */
 export function removeOldDiagramFiles(
   diagramsDir: string,

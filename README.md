@@ -48,17 +48,21 @@ npm install --save-dev vitepress-plugin-diagrams
 
 ```ts
 import { defineConfig } from "vitepress";
-import { configureDiagramsPlugin } from "vitepress-plugin-diagrams";
+import { markdownItGenerateDiagramsPlugin, viteGenerateDiagramsPlugin } from "vitepress-plugin-kroki";
 
 export default defineConfig({
-  markdown: {
-    config: async (md) => {
-      await configureDiagramsPlugin(md, {
-        diagramsDir: "docs/public/diagrams", // Optional: custom directory for SVG files
-        publicPath: "/diagrams", // Optional: custom public path for images
-      });
+    markdown: {
+        config: async (md) => {
+            markdownItGenerateDiagramsPlugin(md, {
+                diagramsDir: "docs/public/diagrams",
+                diagramsDistDir: "diagrams",
+                publicPath: '/public/diagrams',
+            });
+        }
     },
-  },
+    vite: {
+        plugins: [viteGenerateDiagramsPlugin()]
+    },
 });
 ```
 
